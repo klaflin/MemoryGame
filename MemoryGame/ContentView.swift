@@ -7,13 +7,14 @@
 
 import SwiftUI
 
-let halloweenEmojis = ["👻", "🎃", "🕷️", "💀", "🧙", "🍬", "🍫", "🐈‍⬛"]
-let christmasEmojis = ["🎄", "🎅", "🧑‍🎄", "🎁", "🧑‍🎄", "🎊", "🍗"]
-let animalEmojis = ["🐱", "🐶", "🐰", "🐭", "🐨", "🐷", "🐮", "🦄", "🐼"]
+let foodEmojis = ["🍎", "🍌", "🍖", "🍛", "🥟", "🍬", "🍫"]
+let fashionEmojis = [ "👚", "👖", "👘", "🧦", "👗", "🧣"]
+let animalEmojis = ["🐱", "🐶", "🐰", "🐭", "🐨", "🐷", "🐮", "🐼"]
 
 struct ContentView: View {
 
-    @State var emojis = halloweenEmojis
+    @State var emojis: [String] = []
+    //@State var shuffledEmojis: [String] = []
     @State var cardColor: Color = .orange
     @State var cardCount: Int = 4
     
@@ -26,9 +27,9 @@ struct ContentView: View {
             }
             Spacer()
             HStack(){
-                halloweenButton
+                foodButton
                 animalButton
-                christmasButton
+                fashionButton
             }
         }
         .padding()
@@ -36,38 +37,42 @@ struct ContentView: View {
     
     
     var cards : some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
+        let shuffledEmojis = (emojis + emojis).shuffled()
+        return LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
             
-            ForEach(0..<cardCount, id: \.self){index in
-                CardView(content: emojis[index])
+            ForEach(0..<shuffledEmojis.count, id: \.self){index in
+                CardView(content: shuffledEmojis[index])
                     .aspectRatio(2/3, contentMode: .fit)
             }
         }
         .foregroundColor(cardColor)
     }
     
-    func makeThemeButton(title: String, emojiSet: [String], newColor: Color) -> some View {
+    func makeThemeButton(icon: String, title: String, emojiSet: [String], newColor: Color) -> some View {
         Button(action: {
             emojis = emojiSet
             cardColor = newColor
         }, label: {
-            Text(title)
+            VStack{
+                Image(systemName: icon)
+                Text(title)
+            }
         })
         .buttonStyle(.bordered)
         .disabled(emojis == emojiSet)
         
     }
     
-    var halloweenButton: some View {
-        return makeThemeButton(title: "Halloween Theme", emojiSet: halloweenEmojis, newColor: .orange)
-    }
-    
-    var christmasButton: some View {
-        return makeThemeButton(title: "Christmas Theme", emojiSet: christmasEmojis, newColor: .green)
+    var foodButton: some View {
+        return makeThemeButton(icon: "takeoutbag.and.cup.and.straw.fill", title: "Food", emojiSet: foodEmojis, newColor: .red)
     }
     
     var animalButton: some View {
-        return makeThemeButton(title: "Animal Theme", emojiSet: animalEmojis, newColor: .brown)
+        return makeThemeButton(icon: "pawprint.fill", title: "Animals", emojiSet: animalEmojis, newColor: .brown)
+    }
+    
+    var fashionButton: some View {
+        return makeThemeButton(icon: "hanger", title: "Fashion", emojiSet: fashionEmojis, newColor: .purple)
     }
      
 }

@@ -7,16 +7,29 @@
 
 import SwiftUI
 
+let halloweenEmojis = ["👻", "🎃", "🕷️", "💀", "🧙", "🍬", "🍫", "🐈‍⬛"]
+let christmasEmojis = ["🎄", "🎅", "🧑‍🎄", "🎁", "🧑‍🎄", "🎊", "🍗"]
+let animalEmojis = ["🐱", "🐶", "🐰", "🐭", "🐨", "🐷", "🐮", "🦄", "🐼"]
+
 struct ContentView: View {
-    let emojis = ["👻", "🦁", "🎃", "🕷️", "💀", "🧙", "🍬", "🍫", "🐈‍⬛"]
+
+    @State var emojis = halloweenEmojis
+    @State var cardColor: Color = .orange
     @State var cardCount: Int = 4
     
     var body: some View {
         VStack{
+            Text("Memorize!")
+                .font(.title)
             ScrollView{
                 cards
             }
             Spacer()
+            HStack(){
+                halloweenButton
+                animalButton
+                christmasButton
+            }
         }
         .padding()
     }
@@ -30,8 +43,33 @@ struct ContentView: View {
                     .aspectRatio(2/3, contentMode: .fit)
             }
         }
-        .foregroundColor(.orange)
+        .foregroundColor(cardColor)
     }
+    
+    func makeThemeButton(title: String, emojiSet: [String], newColor: Color) -> some View {
+        Button(action: {
+            emojis = emojiSet
+            cardColor = newColor
+        }, label: {
+            Text(title)
+        })
+        .buttonStyle(.bordered)
+        .disabled(emojis == emojiSet)
+        
+    }
+    
+    var halloweenButton: some View {
+        return makeThemeButton(title: "Halloween Theme", emojiSet: halloweenEmojis, newColor: .orange)
+    }
+    
+    var christmasButton: some View {
+        return makeThemeButton(title: "Christmas Theme", emojiSet: christmasEmojis, newColor: .green)
+    }
+    
+    var animalButton: some View {
+        return makeThemeButton(title: "Animal Theme", emojiSet: animalEmojis, newColor: .brown)
+    }
+     
 }
 
 #Preview {

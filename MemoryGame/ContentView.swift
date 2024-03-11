@@ -26,7 +26,7 @@ struct ContentView: View {
                 cards
             }
             Spacer()
-            HStack(){
+            HStack(alignment: VerticalAlignment.bottom){
                 foodButton
                 animalButton
                 fashionButton
@@ -37,7 +37,8 @@ struct ContentView: View {
     
     
     var cards : some View {
-        let shuffledEmojis = (emojis + emojis).shuffled()
+        let randomNumber = emojis.count < 4 ? emojis.count : Int.random(in: 4...emojis.count)
+        let shuffledEmojis = (emojis[0..<randomNumber] + emojis[0..<randomNumber]).shuffled()
         return LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
             
             ForEach(0..<shuffledEmojis.count, id: \.self){index in
@@ -56,7 +57,7 @@ struct ContentView: View {
             VStack{
                 Image(systemName: icon)
                 Text(title)
-            }
+            }.font(.body)
         })
         .buttonStyle(.bordered)
         .disabled(emojis == emojiSet)
@@ -83,7 +84,7 @@ struct ContentView: View {
 
 
 struct CardView: View {
-    @State var isFaceUp = false;
+    @State var isFaceUp = true;
     let content : String;
     
     var body: some View {

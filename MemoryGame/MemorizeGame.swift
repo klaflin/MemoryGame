@@ -18,6 +18,12 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         }
     }
     
+    var gameWon : Bool {
+        get {
+            cards.indices.allSatisfy({cards[$0].isMatched})
+        }
+    }
+    
     private var indexOfSingleFaceUpCard: Int? {
         get { cards.indices.filter{index in cards[index].isFaceUp}.only }
         set { cards.indices.forEach { cards[$0].isFaceUp = (newValue == $0) } }
@@ -41,7 +47,8 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                 if let potentialMatchIndex = indexOfSingleFaceUpCard {
                     //we have one card face up
                     if cards[potentialMatchIndex].content == cards[chosenIndex].content {
-                        //the cards match!
+                        //the cards match! \(cards[potentialMatchIndex]) \(cards[chosenIndex])")
+                        
                         cards[chosenIndex].isMatched = true
                         cards[potentialMatchIndex].isMatched = true
                     } else {

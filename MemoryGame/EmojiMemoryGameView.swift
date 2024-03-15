@@ -16,22 +16,43 @@ struct EmojiMemoryGameView: View {
     
     
     var body: some View {
-        VStack{
-            Text("Memorize \(game.themeName)!")
-                .font(.title)
-                .foregroundStyle(game.themeColor)
-            Text("Your score: \(game.score)")
-            ScrollView{
-                cards
-                    .animation(.default, value: game.cards)
+        if game.haveWon{
+            winner
+        } else {
+            VStack{
+                Text("Memorize \(game.themeName)!")
+                    .font(.title)
+                    .foregroundStyle(game.themeColor)
+                Text("Your score: \(game.score)")
+                ScrollView{
+                    cards
+                        .animation(.default, value: game.cards)
+                }
+                newGameButton
             }
-            Button("New Game"){
-                game.newGame()
-            }
+            .padding()
         }
-        .padding()
     }
     
+    
+    var winner : some View {
+        VStack{
+            Text("You won!")
+                .font(.largeTitle)
+                .bold()
+            Text("Your score: \(game.score)")
+                .font(.title)
+            newGameButton
+        }
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 15).foregroundColor(game.themeColor))
+    }
+    
+    var newGameButton: some View {
+        Button("New Game"){
+            game.newGame()
+        }
+    }
     
     var cards : some View {
         return LazyVGrid(columns: [GridItem(.adaptive(minimum: 85), spacing: 0)], spacing: 0) {

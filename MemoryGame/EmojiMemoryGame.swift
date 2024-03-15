@@ -48,6 +48,8 @@ class EmojiMemoryGame: ObservableObject { //
     
     var score: Int { game.score }
     
+    var haveWon: Bool {game.gameWon}
+    
     //MARK: - Intents
     
     //intent function

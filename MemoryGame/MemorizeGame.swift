@@ -13,15 +13,13 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     
     var score: Int {
         get{
-            cards.indices.filter{index in cards[index].isMatched}.count - 
-            cards.indices.map{cards[$0].hits == 0 ? 0 : cards[$0].hits - 1}.reduce(0, +)
+            cards.indices.filter{index in cards[index].isMatched}.count //each successful match is worth 2 points = 1 per card
+            - cards.indices.map{cards[$0].hits == 0 ? 0 : cards[$0].hits - 1}.reduce(0, +) //each time you see a card after the first time is a 1pt deduciton
         }
     }
     
     var gameWon : Bool {
-        get {
-            cards.indices.allSatisfy({cards[$0].isMatched})
-        }
+        get { cards.indices.allSatisfy({cards[$0].isMatched}) }
     }
     
     private var indexOfSingleFaceUpCard: Int? {
